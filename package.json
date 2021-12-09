@@ -1,0 +1,27 @@
+{
+  "name": "groom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "browser-sync": "^2.26.7",
+    "gulp-concat": "^2.6.1",
+    "gulp": "^3.9.1",
+    "gulp-file-include": "^2.1.1",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-sass": "^4.0.2",
+    "gulp-uglify": "^3.0.2",
+    "gulp-watch": "^5.0.1",
+    "locomotive-scroll": "^4.1.1",
+    "p": "^0.2.0",
+    "run-sequence": "^2.2.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

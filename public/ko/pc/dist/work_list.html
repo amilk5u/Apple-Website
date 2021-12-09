@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi" />
+	<title>인프런 강의 / 애플 웹사이트 스크롤 구현하기</title>
+	<style type="text/css">
+
+		body{width:100%; height:100%;  font-family:vernada; margin:20px auto;}
+		#secretWrapper{width :98%; margin:0 auto;}
+		#secretWrapper h1{font-size:30px; text-align:center; margin:0 0 119px;}
+		#secretWrapper h2{font-size:20px; margin:30px 0 20px;}
+		#secretWrapper table{width:100%; border-top:1px solid #99948e; border-left:1px solid #99948e; border-collapse:collapse;}
+		#secretWrapper table .title1{background-color:#e6002d; color:#fff; padding:7px 0 5px; text-align:center;}
+		#secretWrapper table .title2{background-color:#f7f7f7; color:#707070; padding:7px 0 5px; text-align:center;}
+		#secretWrapper table .title3{background-color:#dfdfdf; color:#707070; padding:7px 0 5px; text-align:center;}
+		#secretWrapper table th{border-right:1px solid #99948e; border-bottom:1px solid #99948e; padding:5px 0;}
+		#secretWrapper table td{border-right:1px solid #99948e; border-bottom:1px solid #99948e;}
+		#secretWrapper table tbody td{padding:8px 20px; font-size:12px;}
+		#secretWrapper table tbody tr td a {color:#333; text-decoration:underline;}
+
+		#secretWrapper table tbody tr.ok th,
+		#secretWrapper table tbody tr.ok td{background:#9f9f95; color:#fff;}
+		#secretWrapper table tbody tr.ok td.dev{background:#9f9f95; color:#fff;}
+		#secretWrapper table tbody tr.ok td a{color:#fff;}
+
+		#secretWrapper table tbody tr.ok2 td{background:#c62b4a; color:#fff;}
+		#secretWrapper table tbody tr.ok2 td.dev {background:#c62b4a; color:#fff;}
+		#secretWrapper table tbody tr.ok2 td a{color:#fff;}
+
+		#secretWrapper table tbody tr.ok3 td{background:#6e58c6; color:#fff;}
+		#secretWrapper table tbody tr.ok3 td.dev {background:#a07fff; color:#333}
+		#secretWrapper table tbody tr.ok3 td a{color:#fff;}
+		#secretWrapper table tbody tr.del td{background:#999; color:#333;}
+
+		.caution {background-color:lightblue;}
+
+		body *{margin:0; padding:0;}
+		#secretWrapper .depth_info { width:98%; position:absolute; top:83px;}
+		#secretWrapper .depth_info.fix { position:fixed; top:0;}
+
+		.ia_guide {padding:30px 0 0;}
+		.ia_guide strong {font-size:20px;}
+		.ia_guide div {padding:20px 0 20px 30px; color:#fff; margin:20px 0 0;}
+		.ia_guide .ok {background-color:#9f9f95;}
+		.ia_guide .ok2 {background-color:#c62b4a;}
+		.ia_guide .ok3 {background-color:#6e58c6;}
+
+		.last_update {position:absolute; right:1%; top:40px;}
+	</style>
+	<script src="javascripts/jquery-1.8.2.min.js"></script>
+	<script>
+		$(function () {
+			var $table = $("table");
+			var $tbody = $table.find("tbody");
+			$table.each(function () {
+				var _this = $(this);
+				var divisionDepth = _this.find("tbody > tr");
+				var divisionLength = divisionDepth.length;
+
+				divisionDepth.eq(0).find("td").eq(0).attr("rowspan", divisionLength);
+			});
+
+			var $depthInfo = $(".depth_info");
+			$(window).scroll(function () {
+				var st = $(this).scrollTop();
+				if(st > 83){
+					$depthInfo.addClass("fix");
+				} else {
+					$depthInfo.removeClass("fix");
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+<div id="secretWrapper">
+	<table class="depth_info">
+		<colgroup>
+			<col width="10%">
+			<col width="15%">
+			<col width="15%">
+			<col width="20%">
+			<col width="10%">
+			<col width="10%">
+			<col>
+		</colgroup>
+		<thead>
+		<tr class="title1">
+			<th colspan="4">DEPTH</th>
+			<th colspan="2">코딩현황</th>
+			<th>개발현황</th>
+		</tr>
+		<tr class="title2">
+			<th></th>
+			<th>1depth</th>
+			<th>2depth</th>
+			<th>3depth</th>
+			<th colspan="2">마크업 파일명</th>
+			<th>작업처리</th>
+		</tr>
+		<tr class="title3">
+			<th>구분</th>
+			<th>Label</th>
+			<th>Label</th>
+			<th>Label</th>
+			<th>Folder</th>
+			<th>File</th>
+			<th>상태</th>
+		</tr>
+		</thead>
+	</table>
+
+	<h1>애플 웹사이트 스크롤 구현하기</h1>
+	<div class="ia_guide">
+		<strong>테이블에 색에 따른 진행 상태 분류</strong>
+		<div class="ok">퍼블 진행중</div>
+		<div class="ok2">퍼블 완료됬지만 - 디자인/기획에서 수정/변경이 있어서 차후 수정이 필요한 페이지</div>
+		<div class="ok3">퍼블 완료 - 디자인/기획까지 컨펌 완료</div>
+	</div>
+
+	<!-- 메인 -->
+	<h2>Main</h2>
+	<table>
+		<colgroup>
+			<col width="10%">
+			<col width="15%">
+			<col width="15%">
+			<col width="20%">
+			<col width="10%">
+			<col width="10%">
+			<col>
+		</colgroup>
+		<tbody>
+		<tr class="">
+			<td>Main</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>준비중</td>
+			<td><a href="./index.html" target="_blank">main</a></td>
+			<td class=""></td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
