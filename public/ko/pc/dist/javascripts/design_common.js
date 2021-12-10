@@ -44,18 +44,12 @@ function main() {
                messageB: document.querySelector('#scroll-section-0 .main-message.b'),
                messageC: document.querySelector('#scroll-section-0 .main-message.c'),
                messageD: document.querySelector('#scroll-section-0 .main-message.d'),
-               canvas: document.querySelector('#video-canvas-0'),
-               context: document.querySelector('#video-canvas-0').getContext('2d'),
-               videoImages: []
             },
             values: {
-               videoImageCount: 300,
-               imageSequence: [0, 299],
-               canvas_opacity: [1, 0, { start: 0.9, end: 1 }],
                messageA_opacity_in: [0, 1, { start: 0.1, end: 0.2 }],
-               messageB_opacity_in: [0, 1, { start: 0.3, end: 0.4 }],
-               messageC_opacity_in: [0, 1, { start: 0.5, end: 0.6 }],
-               messageD_opacity_in: [0, 1, { start: 0.7, end: 0.8 }],
+               messageA_opacity_out: [1, 0, {start: 0.25, end: 0.3}],
+               messageA_translateY_in: [20, 0, {start: 0.1, end: 0.2}],
+               messageA_translateY_out: [0, -20, {start: 0.25, end: 0.3}],
             }
          },
          {
@@ -98,28 +92,27 @@ function main() {
       function setLayout() {
          // 각 스크롤 섹션의 높이 세팅
          for (let i = 0; i < sceneInfo.length; i++) {
-            if (sceneInfo[i].type === 'sticky') {
+            if (sceneInfo[i].type === "sticky") {
                sceneInfo[i].scrollHeight = sceneInfo[i].heightNum * window.innerHeight;
-            } else if (sceneInfo[i].type === 'normal')  {
-               sceneInfo[i].scrollHeight = sceneInfo[i].objs.content.offsetHeight + window.innerHeight * 0.5;
+
+            } else if (sceneInfo[i].type === "normal") {
+               sceneInfo[i].scrollHeight = sceneInfo[i].objs.container.offsetHeight;
             }
             sceneInfo[i].objs.container.style.height = `${sceneInfo[i].scrollHeight}px`;
          }
          yOffset = window.pageYOffset;
 
-         let totalScrollHeight = 0;
+         // 새로고침시 섹션 id 값에 현재 신 적용
+         let totalScrollHeight = 0; // 토탈 스트롤 높이
          for (let i = 0; i < sceneInfo.length; i++) {
-            totalScrollHeight += sceneInfo[i].scrollHeight;
-            if (totalScrollHeight >= yOffset) {
+            totalScrollHeight += sceneInfo[i].scrollHeight; // 현재 스크롤 섹션의 높이를 토탈값에 넣음 0:4000 / 1:8000 / 2:12000
+            if (totalScrollHeight >= yOffset) { // 토탈 스크롤 높이값이 현재 스크롤 값보다 클 때
                currentScene = i;
-               break;
+               break; // 반복문을 끝내고 벗어남
             }
          }
+         // 현재 섹션 넘버값을 값을 바디 id 에 넣음
          document.body.setAttribute('id', `show-scene-${currentScene}`);
-
-         const heightRatio = window.innerHeight / 1080;
-         sceneInfo[0].objs.canvas.style.transform = `translate3d(-50%, -50%, 0) scale(${heightRatio})`;
-         sceneInfo[2].objs.canvas.style.transform = `translate3d(-50%, -50%, 0) scale(${heightRatio})`;
       }
 
       function calcValues(values, currentYOffset) {
@@ -157,47 +150,65 @@ function main() {
 
          switch (currentScene) {
             case 0:
-               // console.log('0 play');
-               // let sequence = Math.round(calcValues(values.imageSequence, currentYOffset));
-               // objs.context.drawImage(objs.videoImages[sequence], 0, 0);
-               objs.canvas.style.opacity = calcValues(values.canvas_opacity, currentYOffset);
+               const messageA_opacity_in = calcValues(values.messageA_opacity_in, currentYOffset);
+               const messageA_opacity_out = calcValues(values.messageA_opacity_out, currentYOffset);
+               const messageA_translateY_in = calcValues(values.messageA_translateY_in, currentYOffset);
+               const messageA_translateY_out = calcValues(values.messageA_translateY_out, currentYOffset);
+               objs.messageA.style.opacity = messageA_opacity_in;
+
+               if ( scrollRatio <= 0.22 ) {
+                  // in
+                  objs.messageA.style.opacity = messageA_opacity_in;
+                  objs.messageA.style.transform = `translateY(${messageA_translateY_in}%)`;
+
+               } else {
+                  // out
+                  objs.messageA.style.opacity = messageA_opacity_out;
+                  objs.messageA.style.transform = `translateY(${messageA_translateY_out}%)`;
+               }
                break;
             case 2:
                break;
-
             case 3:
                break;
          }
       }
 
+      // 현재 스크롤 되는 신 넘버 값을 판별하여 섹션 id 에 값을 넣어주는 함수
       function scrollLoop() {
-         enterNewScene = false;
-         prevScrollHeight = 0;
+         enterNewScene = false; // 현재 들어온 신
+         prevScrollHeight = 0; // 이전 섹션 높이를 더한 값
 
          for (let i = 0; i < currentScene; i++) {
             prevScrollHeight += sceneInfo[i].scrollHeight;
          }
 
+         // 현재 스크롤 된 값이 (이전 높이값 보다 클 때)
+         if (yOffset > prevScrollHeight + sceneInfo[currentScene].scrollHeight ) {
+            enterNewScene = true;
+            currentScene++;
+            document.body.setAttribute('id',`show-scene-${currentScene}`)
+         }
+         // 현재 스크롤 된 값이 
+         if (yOffset < prevScrollHeight) {
+            enterNewScene = true;
+            if (currentScene === 0) return;
+            currentScene--;
+            document.body.setAttribute('id',`show-scene-${currentScene}`)
+         }
+
+         // console.log("전 enterNewScene "+enterNewScene);
          if (enterNewScene) return;
-         playAnimation();
+         // console.log("후 enterNewScene "+enterNewScene);
+          playAnimation();
       }
 
-      window.addEventListener('load', () => {
-         let tempYOffset = yOffset;
-         let tempScrollCount = 0;
-         if (tempYOffset > 0) {
-            let siId = setInterval(() => {
-               scrollTo(0, tempYOffset);
-               tempYOffset += 5;
-
-               if (tempScrollCount > 20) {
-                  clearInterval(siId);
-               }
-               tempScrollCount++;
-            }, 20);
-         }
-         window.addEventListener('scroll', scrollLoop);
-         window.addEventListener('resize', setLayout);
+      window.addEventListener('scroll', () => {
+         yOffset = window.pageYOffset;
+         scrollLoop();
       });
+      window.addEventListener('load', setLayout);
+
+
    })();
 }

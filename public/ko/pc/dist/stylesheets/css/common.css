@@ -164,7 +164,7 @@ body.before-load { overflow: hidden; }
 
 .local-nav-links a:not(.product-name) { margin-left: 2em; }
 
-.scroll-section { position: relative; padding-top: 50vh; }
+.scroll-section { position: relative; padding-top: 50vh; border: 3px solid red; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
 
 #scroll-section-0 h1 { position: relative; top: -10vh; z-index: 5; font-size: 4rem; text-align: center; }
 
