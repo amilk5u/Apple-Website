@@ -303,7 +303,5 @@ function main() {
          scrollLoop();
       });
       window.addEventListener('load', setLayout);
-
-
    })();
 }
