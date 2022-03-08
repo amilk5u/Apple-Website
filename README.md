@@ -1,14 +1,13 @@
 # Apple-Website
 
+1. 애플 웹사이트 스크롤 모션 구현하기 
 
 
-1. 애플 웹사이트 스크롤 모션 구현하기
- 
- 
- 
-2. 데모 페이지 이미지 첨부
-4. 데모페이지 첨부
-5. 개발목표
-6. 사용기술 (1.2.3.4.5)
-7. advaced Feature (설명하고싶은 부분설명과 코드이미지추가)
-8. 개선사항
+
+![image](https://user-images.githubusercontent.com/55374275/157200190-a4ba1c63-1bce-428e-be7c-569c3f689a13.png)
+
+
+
+
+* 개발목표 - apple 인터렉션 모션을 사용 할 수 있다
+* 사용기술 html / css / javascript
